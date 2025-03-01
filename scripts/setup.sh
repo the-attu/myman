@@ -2,6 +2,7 @@
 
 echo "summoned"
 
+
 # ---------------
 # necessary steps
 # ---------------
@@ -17,6 +18,7 @@ pkg install termux-api coreutils -y
 
 # and, obviously
 pkg uninstall nano -y
+
 
 # -----------
 # basic setup
@@ -52,6 +54,7 @@ cp -r "$termux" "$HOME/.termux/"
 cp "$motd" "$HOME/../usr/etc/motd"
 cp "$bashrc" "$HOME/.bashrc"
 cp "$bash_aliases" "$HOME/.bash_aliases"
+
 
 # ------------------------
 # commencing end of script
