@@ -69,7 +69,7 @@ replace_configs() {
     prompt "backup existing configs? (y/N) " "alias cp='cp --backup'"
 
     cp -vr "$termux_conf" "$HOME/"
-    cp -vr "$bash_conf"/* "$HOME/"
+    cp -vr "$bash_conf"/.* "$HOME/"
     
     mkdir -p "$HOME/.config/"
     cp -vr "$lsd_conf" "$HOME/.config/"
