@@ -12,7 +12,7 @@ prompt() {
     local cmd="$2"
     local affirm="${3:-y}"  # Defaults to 'y' if no third argument is provided
 
-    echo -n "$msg"
+    echo -n "\n$msg"
     read -r choice
 
     if [[ "$choice" == "$affirm" ]]; then
@@ -24,15 +24,15 @@ prompt() {
 
 prompt "Give Termux permissions to access your files in internal storage? (y/N) " "termux-setup-storage"
 
-echo "Updating package lists and upgrading installed packages..."
+echo "\nUpdating package lists and upgrading installed packages..."
 pkg update && pkg upgrade -y
 pkg install -y coreutils termux-api
 
-echo "Ensuring Termux:API addon is installed for clipboard interactions and more."
+echo "\nEnsuring Termux:API addon is installed for clipboard interactions and more."
 echo "Press <Enter> to continue..."
 read -r
 
-# Ensure nano is uninstalled if present
+# and, obviously
 if command -v nano &>/dev/null; then
     pkg uninstall -y nano
 fi
@@ -56,8 +56,8 @@ get_config() {
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/../"
 cd || exit 1  # Ensure we're in the home directory
 
-echo "Installing required packages..."
-pkg install -y lsd fastfetch starship lazygit zoxide neovim
+echo "\nInstalling required packages..."
+pkg install -y git gh lsd fastfetch starship lazygit zoxide neovim
 
 # Get stored configs
 termux_conf=$(get_config "$DIR/res/.termux")
@@ -65,20 +65,22 @@ bash_conf=$(get_config "$DIR/res/.bash")
 lsd_conf=$(get_config "$DIR/res/lsd")
 motd_conf=$(get_config "$DIR/res/motd")
 
-# Conditional config replacement
-prompt "Replace existing configs? Or skip to first see/edit files in res/ (y/N) " "replace_configs"
-
 replace_configs() {
-    cp -vr "$termux_conf"/* "$HOME/.termux/"
+    prompt "backup existing configs? (y/N) " "alias cp='cp --backup'"
+
+    cp -vr "$termux_conf" "$HOME/"
     cp -vr "$bash_conf"/* "$HOME/"
     
     mkdir -p "$HOME/.config/"
     cp -vr "$lsd_conf" "$HOME/.config/"
 
-    git clone https://github.com/the-attu/kickstart.nvim "$HOME/.config/"
+    git clone https://github.com/the-attu/kickstart.nvim "$HOME/.config/nvim"
 
     cp -v "$motd_conf" "$HOME/../usr/etc/motd"
 }
+
+# Conditional config replacement
+prompt "Replace existing configs? Or skip to first see/edit files in res/ (y/N) " "replace_configs"
 
 # ------------------------
 # End of script
