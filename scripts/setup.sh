@@ -12,7 +12,8 @@ prompt() {
     local cmd="$2"
     local affirm="${3:-y}"  # Defaults to 'y' if no third argument is provided
 
-    echo -n "\n$msg"
+    echo
+    echo -n "$msg"
     read -r choice
 
     if [[ "$choice" == "$affirm" ]]; then
@@ -24,11 +25,13 @@ prompt() {
 
 prompt "Give Termux permissions to access your files in internal storage? (y/N) " "termux-setup-storage"
 
-echo "\nUpdating package lists and upgrading installed packages..."
+echo
+echo "Updating package lists and upgrading installed packages..."
 pkg update && pkg upgrade -y
 pkg install -y coreutils termux-api
 
-echo "\nEnsuring Termux:API addon is installed for clipboard interactions and more."
+echo
+echo "Ensuring Termux:API addon is installed for clipboard interactions and more."
 echo "Press <Enter> to continue..."
 read -r
 
@@ -56,8 +59,9 @@ get_config() {
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/../"
 cd || exit 1  # Ensure we're in the home directory
 
-echo "\nInstalling required packages..."
-pkg install -y git gh lsd fastfetch starship lazygit zoxide neovim
+echo
+echo "Installing required packages..."
+pkg install fastfetch lsd starship zoxide git gh lazygit clang neovim
 
 # Get stored configs
 termux_conf=$(get_config "$DIR/res/.termux")
@@ -78,6 +82,8 @@ replace_configs() {
 
     cp -v "$motd_conf" "$HOME/../usr/etc/motd"
 }
+
+gh auth login
 
 # Conditional config replacement
 prompt "Replace existing configs? Or skip to first see/edit files in res/ (y/N) " "replace_configs"
