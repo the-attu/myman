@@ -83,10 +83,9 @@ replace_configs() {
     cp -v "$motd_conf" "$HOME/../usr/etc/motd"
 }
 
-gh auth login
-
 # Conditional config replacement
 prompt "Replace existing configs? Or skip to first see/edit files in res/ (y/N) " "replace_configs"
+prompt "Login git with gh? (y/N) " "gh auth login"
 
 # ------------------------
 # End of script
